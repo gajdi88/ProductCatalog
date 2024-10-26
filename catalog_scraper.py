@@ -1,7 +1,7 @@
 # catalog_scraper.py
 from bs4 import BeautifulSoup
 from utils import get_html, delay
-from config import CATALOG_URL, BASE_URL
+from config import CATALOG_URL1, CATALOG_URL2
 
 
 def get_catalog_page_urls():
@@ -13,7 +13,7 @@ def get_catalog_page_urls():
     page = 0
     while True:
         #url = f"{CATALOG_URL}?page={page}"  # Adjust based on the actual URL structure
-        url = CATALOG_URL
+        url = CATALOG_URL1 + str(page*24) + CATALOG_URL2
         html = get_html(url)
         if not html:
             break
@@ -29,8 +29,9 @@ def get_catalog_page_urls():
         print(f"Page {page}: Collected {len(product_links)} product URLs.")
 
         page += 1
-        break
         delay()
+        if page>2:
+            break
 
 
     return catalog_urls
