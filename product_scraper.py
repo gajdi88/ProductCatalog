@@ -15,11 +15,11 @@ def parse_product_page(url):
 
     # Extract product details; adjust selectors based on HTML structure
     product_name = soup.find('h1', {'class': 'product-name'}).get_text(strip=True) if soup.find('h1', {
-        'class': 'product-title'}) else "N/A"
+        'class': 'product-name'}) else "N/A"
     # price = soup.find('span', {'class': 'product-price'}).get_text(strip=True) if soup.find('span', {
     #     'class': 'product-price'}) else "N/A"
     description = soup.find('div', {'class': 'product-description-wrapper-new padding'}).get_text(strip=True) if soup.find('div', {
-        'class': 'product-description'}) else "N/A"
+        'class': 'product-description-wrapper-new padding'}) else "N/A"
 
     product_data = {
         'Product Name': product_name,
