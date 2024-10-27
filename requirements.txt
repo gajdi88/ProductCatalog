@@ -3,3 +3,5 @@ utils
 requests
 voyageai
 python-dotenv
+pandas
+numpy
