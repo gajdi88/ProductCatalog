@@ -34,9 +34,23 @@ def parse_product_page(url):
         spec_value = dl.find("dd").get_text(" ", strip=True)  # ' ' joins multi-line content with spaces
         specs[spec_name] = spec_value
 
+    # Find the parent container by its id
+    features_section = soup.find("div", {"id": "section-featuresgroup-2007"})
+
+    # List to store each feature
+    features = []
+
+    # Loop through each feature item
+    for li in features_section.find_all("li"):
+        # Get the text content of each <li>, joining multiple lines with a space
+        feature_text = li.get_text(" ", strip=True)
+        features.append(feature_text)
+
     product_data = {
         'Product Name': product_name,
         'Description': description,
+        'Specifications': specs,
+        'Features': features,
         'URL': url
     }
     print(f"Scraped data for {product_name}")

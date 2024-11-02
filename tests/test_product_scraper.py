@@ -66,6 +66,8 @@ class TestProductScraper(unittest.TestCase):
         self.assertEqual(result['Product Name'], "Incomplete Product")
         self.assertEqual(result['Description'], "N/A")
         self.assertEqual(result['URL'], url)
+        
+        #todo: test specs and features too
 
 if __name__ == '__main__':
     unittest.main()
