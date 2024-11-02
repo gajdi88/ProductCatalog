@@ -51,5 +51,21 @@ class TestProductScraper(unittest.TestCase):
         self.assertEqual(result['Description'], "N/A")
         self.assertEqual(result['URL'], url)
 
+    @patch('product_scraper.get_html')
+    def test_parse_product_page_specs_features(self, mock_get_html):
+        # Arrange
+        with open('full_html_text.html', 'r') as file:
+            incomplete_html = file.read()
+        mock_get_html.return_value = incomplete_html
+        url = "https://www.emerson.com/en-us/catalog/full-pressure-product"
+
+        # Act
+        result = parse_product_page(url)
+
+        # Assert
+        self.assertEqual(result['Product Name'], "Incomplete Product")
+        self.assertEqual(result['Description'], "N/A")
+        self.assertEqual(result['URL'], url)
+
 if __name__ == '__main__':
     unittest.main()
