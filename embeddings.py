@@ -5,9 +5,10 @@ import numpy as np
 import json
 from dotenv import load_dotenv
 import voyageai
-import torch
-import torch.nn.functional as F
-from transformers import AutoTokenizer, AutoModel
+# import torch
+# import torch.nn.functional as F
+# from transformers import AutoTokenizer, AutoModel
+import time
 
 # Load environment variables
 load_dotenv()  # This loads the VOYAGE_API_KEY from .env
@@ -29,10 +30,18 @@ class EmbeddingFramework:
 
     def embed(self, texts, input_type="document"):
         if self.framework == "voyageai":
-            # VoyageAI embedding logic
+            # VoyageAI embedding logic with throttling
             client = voyageai.Client()  # Initialize client using VOYAGE_API_KEY
-            result = client.embed(texts, model=self.model, input_type=input_type)
-            return np.vstack(result.embeddings)
+            embeddings = []
+            ii = 0
+            for text in texts:
+                ii += 1
+                print(ii)
+                result = client.embed([text], model=self.model, input_type=input_type)
+                embeddings.append(result.embeddings[0])
+                time.sleep(20)  # Wait for 20 seconds between API calls to stay within rate limits
+            return np.vstack(embeddings)
+
 
         elif self.framework == "transformer":
             # Transformer embedding logic with instruction-based queries
