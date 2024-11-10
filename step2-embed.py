@@ -1,30 +1,20 @@
-import voyageai
-from dotenv import load_dotenv
-import pandas as pd
-import numpy as np
-import json
+from embeddings import EmbeddingFramework, load_data, save_data, add_embeddings_to_df
 
-load_dotenv() #load VOYAGE_API_KEY environment variable
 
-vo = voyageai.Client() # use VOYAGE_API_KEY for authentication
-
+# Define paths and initialize embedding framework
 input_csv_path = 'emerson_products.csv'  # Replace with your CSV file path
 output_csv_path = 'original_dataset_with_embeddings.csv'  # Replace as needed
+embedding_framework = EmbeddingFramework(framework="voyageai", model="voyage-3")
 
-# Read the CSV file
-df = pd.read_csv(input_csv_path)
-
-# Check if 'Description' column exists
-if 'Description' not in df.columns:
-    raise ValueError("The CSV does not contain a 'Description' column.")
-
-
+# Load data
+df = load_data(input_csv_path)
 description_array = df['Description'].astype(str).tolist()
 
-result = vo.embed(description_array, model="voyage-3", input_type="document")
-print(result.embeddings)
+# Get embeddings
+embeddings = embedding_framework.embed(description_array)
 
-embeddings = np.vstack(result.embeddings)
+# Add embeddings to DataFrame
+df = add_embeddings_to_df(df, embeddings)
 
-df['Embeddings'] = [json.dumps(embedding.tolist()) for embedding in embeddings]
-df.to_csv(output_csv_path, index=False)
+# Save the DataFrame
+save_data(df, output_csv_path)
