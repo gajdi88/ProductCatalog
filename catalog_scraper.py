@@ -30,7 +30,7 @@ def get_catalog_page_urls():
 
         page += 1
         delay()
-        if page>2:
+        if page>0:
             break
 
 

@@ -21,8 +21,8 @@ def parse_product_page(url):
     description = soup.find('div', {'class': 'product-description-wrapper-new padding'}).get_text(strip=True) if soup.find('div', {
         'class': 'product-description-wrapper-new padding'}) else "N/A"
 
-    # Find the parent container by its id
-    spec_section = soup.find("div", {"id": "section-specificationgroup-2007"})
+    # Find the parent container by its class
+    spec_section = soup.find("div", {"class": "specifications section"})
 
     # Dictionary to store each spec's name and value
     specs = {}
@@ -35,7 +35,7 @@ def parse_product_page(url):
         specs[spec_name] = spec_value
 
     # Find the parent container by its id
-    features_section = soup.find("div", {"id": "section-featuresgroup-2007"})
+    features_section = soup.find("div", {"class": "features section"})
 
     # List to store each feature
     features = []
