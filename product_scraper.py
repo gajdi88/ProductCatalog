@@ -27,12 +27,13 @@ def parse_product_page(url):
     # Dictionary to store each spec's name and value
     specs = {}
 
-    # Loop through each specification item
-    for dl in spec_section.find_all("dl", class_="row generic-attr"):
-        # Extract the specification name and value
-        spec_name = dl.find("dt").get_text(strip=True)
-        spec_value = dl.find("dd").get_text(" ", strip=True)  # ' ' joins multi-line content with spaces
-        specs[spec_name] = spec_value
+    if spec_section is not None:
+        # Loop through each specification item
+        for dl in spec_section.find_all("dl", class_="row generic-attr"):
+            # Extract the specification name and value
+            spec_name = dl.find("dt").get_text(strip=True)
+            spec_value = dl.find("dd").get_text(" ", strip=True)  # ' ' joins multi-line content with spaces
+            specs[spec_name] = spec_value
 
     # Find the parent container by its id
     features_section = soup.find("div", {"class": "features section"})
@@ -40,11 +41,12 @@ def parse_product_page(url):
     # List to store each feature
     features = []
 
-    # Loop through each feature item
-    for li in features_section.find_all("li"):
-        # Get the text content of each <li>, joining multiple lines with a space
-        feature_text = li.get_text(" ", strip=True)
-        features.append(feature_text)
+    if features_section is not None:
+        # Loop through each feature item
+        for li in features_section.find_all("li"):
+            # Get the text content of each <li>, joining multiple lines with a space
+            feature_text = li.get_text(" ", strip=True)
+            features.append(feature_text)
 
     product_data = {
         'Product Name': product_name,

@@ -26,6 +26,8 @@ def get_catalog_page_urls():
 
         # catalog_urls.extend([f"{BASE_URL}{link}" for link in product_links])
         catalog_urls.extend(product_links)
+        # catalog_urls=catalog_urls[0]
+
         print(f"Page {page}: Collected {len(product_links)} product URLs.")
 
         page += 1
