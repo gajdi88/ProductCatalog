@@ -3,10 +3,9 @@ import pandas as pd
 import numpy as np
 import json
 from dotenv import load_dotenv
-import voyageai
+from embeddings import EmbeddingFramework  # Assuming your EmbeddingFramework class is in embeddings.py
 
 load_dotenv() #load VOYAGE_API_KEY environment variable
-vo = voyageai.Client() # use VOYAGE_API_KEY for authentication
 
 # Step 1: Load the CSV and deserialize embeddings
 def load_data(csv_path):
@@ -26,10 +25,10 @@ def initialize_nn(embedding_matrix, n_neighbors=5, metric='cosine'):
     nn_model.fit(embedding_matrix)
     return nn_model
 
-# Step 3: Embed the query
-def embed_query(query):
-    result = vo.embed(query, model="voyage-3", input_type="document")
-    return result.embeddings
+# Step 3: Embed the query using EmbeddingFramework
+def embed_query(query, embedder):
+    query_embedding = embedder.embed([query], input_type="document")
+    return np.array(query_embedding)
 
 
 # Step 4: Retrieve nearest neighbors
@@ -40,7 +39,10 @@ def retrieve_nearest(query_embedding, nn_model, df, top_k=5):
     # For cosine similarity, similarity = 1 - distance
     similarities = 1 - distances.flatten()
 
-    top_matches = df.iloc[indices.flatten()].copy()
+    # Flatten indices for DataFrame selection
+    flattened_indices = indices.flatten()
+
+    top_matches = df.iloc[flattened_indices].copy()
     top_matches['Similarity'] = similarities
 
     return top_matches
@@ -49,7 +51,7 @@ def retrieve_nearest(query_embedding, nn_model, df, top_k=5):
 # Step 5: Main function
 def main():
     # Paths
-    csv_path = 'emerson_products_256_w_specs_features_with_embeddings.csv'  # Replace with your CSV path
+    csv_path = 'emerson_products_256_spft_ANLP2.csv'  # Replace with your CSV path
 
     # Load data
     df, embedding_matrix = load_data(csv_path)
@@ -57,13 +59,16 @@ def main():
     # Initialize NearestNeighbors
     nn_model = initialize_nn(embedding_matrix, n_neighbors=5, metric='cosine')
 
+    # Initialize the embedding framework
+    embedder = EmbeddingFramework(framework="transformer", model="Alibaba-NLP/gte-large-en-v1.5")
+
     while True:
         query = input("Enter your query (or 'exit' to quit): ")
         if query.lower() == 'exit':
             break
 
-        # Embed the query
-        query_embedding = embed_query(query)
+        # Embed the query using the embedder
+        query_embedding = embed_query(query, embedder)
 
         # Retrieve top matches
         top_matches = retrieve_nearest(query_embedding, nn_model, df, top_k=10)
