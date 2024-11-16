@@ -4,8 +4,8 @@ from utils import concatenate_columns
 # Define paths and initialize embedding framework
 input_csv_path = 'emerson_products.csv'  # Replace with your CSV file path
 output_csv_path = 'original_dataset_with_embeddings.csv'  # Replace as needed
-embedding_framework = EmbeddingFramework(framework="voyageai", model="voyage-3")
-#embedding_framework = EmbeddingFramework(framework="transformer", model="nvidia/NV-Embed-v2")
+#embedding_framework = EmbeddingFramework(framework="voyageai", model="voyage-3")
+embedding_framework = EmbeddingFramework(framework="transformer", model="nvidia/NV-Embed-v2")
 
 
 # Load data

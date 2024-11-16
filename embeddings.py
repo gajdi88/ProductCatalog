@@ -5,9 +5,9 @@ import numpy as np
 import json
 from dotenv import load_dotenv
 import voyageai
-# import torch
-# import torch.nn.functional as F
-# from transformers import AutoTokenizer, AutoModel
+import torch
+import torch.nn.functional as F
+from transformers import AutoTokenizer, AutoModel
 import time
 
 # Load environment variables
@@ -24,9 +24,12 @@ class EmbeddingFramework:
         self.framework = framework
         self.model = model
         if self.framework == "transformer":
+            self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
             # Initialize the transformer model and tokenizer
             self.tokenizer = AutoTokenizer.from_pretrained(model)
-            self.transformer_model = AutoModel.from_pretrained(model, trust_remote_code=True)
+            self.transformer_model = AutoModel.from_pretrained(model, trust_remote_code=True).to(self.device)
+
 
     def embed(self, texts, input_type="document"):
         if self.framework == "voyageai":
@@ -56,7 +59,15 @@ class EmbeddingFramework:
         # Add prefix instruction to each text
         inputs = [instruction + text for text in texts]
         # Get embeddings
-        embeddings = self.transformer_model.encode(inputs, max_length=max_length)
+        # embeddings = self.transformer_model.encode(inputs, max_length=max_length)
+
+        tokenized_inputs = self.tokenizer(inputs, return_tensors="pt", padding=True, truncation=True,
+                                          max_length=max_length).to(self.device)
+        # Get embeddings
+        with torch.no_grad():
+            model_output = self.transformer_model(**tokenized_inputs)
+            embeddings = model_output.last_hidden_state.mean(dim=1)
+
         # Normalize embeddings
         normalized_embeddings = F.normalize(embeddings, p=2, dim=1)
         return normalized_embeddings.detach().numpy()
