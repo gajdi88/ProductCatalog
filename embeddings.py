@@ -70,7 +70,8 @@ class EmbeddingFramework:
 
         # Normalize embeddings
         normalized_embeddings = F.normalize(embeddings, p=2, dim=1)
-        return normalized_embeddings.detach().numpy()
+        #return normalized_embeddings.detach().numpy()
+        return normalized_embeddings.cpu().numpy()
 
 
 def load_data(input_csv_path):

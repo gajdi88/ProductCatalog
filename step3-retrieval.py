@@ -49,7 +49,7 @@ def retrieve_nearest(query_embedding, nn_model, df, top_k=5):
 # Step 5: Main function
 def main():
     # Paths
-    csv_path = 'emerson_products_256_w_specs_features.csv'  # Replace with your CSV path
+    csv_path = 'emerson_products_256_w_specs_features_with_embeddings.csv'  # Replace with your CSV path
 
     # Load data
     df, embedding_matrix = load_data(csv_path)
