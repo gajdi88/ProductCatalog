@@ -8,7 +8,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
 
 from config import CATALOG_URL
 
@@ -49,12 +48,10 @@ def get_catalog_page_urls():
                 next_button = driver.find_element(By.CSS_SELECTOR,
                                                   ".next-wrapper")  # Replace with actual CSS selector
                 next_button.click()
-                time.sleep(5)
+                delay((10, 12))
                 page += 1
             except Exception as e:
                 print(f"No 'Next Page' button found: {e}")
-                break
-            if page>10:
                 break
 
     finally:

@@ -36,8 +36,8 @@ def get_html(url):
         print(f"Failed to retrieve {url}")
         return None
 
-def delay():
-    time.sleep(random.uniform(*DELAY_BETWEEN_REQUESTS))
+def delay(delaysec=DELAY_BETWEEN_REQUESTS):
+    time.sleep(random.uniform(*delaysec))
 
 def save_to_csv(data, filename="emerson_products_10p.csv"):
     if not data:

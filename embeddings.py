@@ -55,23 +55,25 @@ class EmbeddingFramework:
         else:
             raise ValueError("Unsupported embedding framework.")
 
-    def _get_transformer_embeddings(self, texts, instruction, max_length=32768):
-        # Add prefix instruction to each text
-        inputs = [instruction + text for text in texts]
-        # Get embeddings
-        # embeddings = self.transformer_model.encode(inputs, max_length=max_length)
-
-        tokenized_inputs = self.tokenizer(inputs, return_tensors="pt", padding=True, truncation=True,
-                                          max_length=max_length).to(self.device)
-        # Get embeddings
-        with torch.no_grad():
-            model_output = self.transformer_model(**tokenized_inputs)
-            embeddings = model_output.last_hidden_state.mean(dim=1)
-
-        # Normalize embeddings
-        normalized_embeddings = F.normalize(embeddings, p=2, dim=1)
-        #return normalized_embeddings.detach().numpy()
-        return normalized_embeddings.cpu().numpy()
+    def _get_transformer_embeddings(self, texts, instruction, max_length=32768, batch_size=16):
+        embeddings_list = []
+        num_texts = len(texts)
+        for i in range(0, num_texts, batch_size):
+            batch_texts = texts[i:i + batch_size]
+            # Add prefix instruction to each text in the batch
+            inputs = [instruction + text for text in batch_texts]
+            # Tokenize the batch
+            tokenized_inputs = self.tokenizer(inputs, return_tensors="pt", padding=True, truncation=True,
+                                              max_length=max_length).to(self.device)
+            # Get embeddings
+            with torch.no_grad():
+                model_output = self.transformer_model(**tokenized_inputs)
+                embeddings = model_output.last_hidden_state.mean(dim=1)
+            # Normalize embeddings
+            normalized_embeddings = F.normalize(embeddings, p=2, dim=1)
+            embeddings_list.append(normalized_embeddings.cpu().numpy())
+        # Concatenate all embeddings
+        return np.vstack(embeddings_list)
 
 
 def load_data(input_csv_path):
