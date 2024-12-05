@@ -15,7 +15,7 @@ load_dotenv()  # This loads the VOYAGE_API_KEY from .env
 
 # Task description for the transformer model
 task_name_to_instruct = {
-    "default": "Given a question, retrieve passages that answer the question"
+    "default": "Given a web search query, retrieve relevant passages that answer the query."
 }
 
 
@@ -31,7 +31,7 @@ class EmbeddingFramework:
             self.transformer_model = AutoModel.from_pretrained(model, trust_remote_code=True).to(self.device)
 
 
-    def embed(self, texts, input_type="document"):
+    def embed(self, texts, input_type="document",query=True):
         if self.framework == "voyageai":
             # VoyageAI embedding logic with throttling
             client = voyageai.Client()  # Initialize client using VOYAGE_API_KEY
@@ -48,7 +48,10 @@ class EmbeddingFramework:
 
         elif self.framework == "transformer":
             # Transformer embedding logic with instruction-based queries
-            instruction = "Instruct: " + task_name_to_instruct.get("default", "") + "\nQuery: "
+            if query:
+                instruction = "Instruct: " + task_name_to_instruct.get("default", "") + "\nQuery: "
+            else:
+                instruction = ""
             embeddings = self._get_transformer_embeddings(texts, instruction)
             return embeddings
 
