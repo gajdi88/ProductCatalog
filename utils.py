@@ -8,7 +8,8 @@ import ast
 
 def concatenate_columns(df):
     def format_row(row):
-        description = f"Description: {row['Description']}. "
+        # description = f"Description: {row['Description']}. "
+        description = f"{row['Description']}. "
 
         # Parse and format Specification
         try:
@@ -24,7 +25,8 @@ def concatenate_columns(df):
         except (ValueError, SyntaxError):
             features = "Features: Not available."
 
-        return f"{description} {specifications} {features}"
+        # return f"{description} {specifications} {features}"
+        return f"{description}"
 
     return df.apply(format_row, axis=1)
 
