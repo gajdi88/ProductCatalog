@@ -10,6 +10,7 @@ scikit-learn
 # with Cuda 12.4
 # pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
 transformers
+sentence-transformers
 # torch==2.2.0
 # transformers==4.42.4
 # flash-attn==2.2.0

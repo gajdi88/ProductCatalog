@@ -52,7 +52,7 @@ def retrieve_nearest(query_embedding, nn_model, df, top_k=5):
 def main():
     # Paths
     # csv_path = 'emerson_products_97p_nodup_ANLP.csv'  # Replace with your CSV path
-    csv_path = 'emerson_products_97p_ANLP_noquery.csv'  # Replace with your CSV path
+    csv_path = 'emerson_products_97p_ANLP_noquery_ST.csv'  # Replace with your CSV path
 
     # Load data
     df, embedding_matrix = load_data(csv_path)
@@ -61,7 +61,8 @@ def main():
     nn_model = initialize_nn(embedding_matrix, n_neighbors=5, metric='cosine')
 
     # Initialize the embedding framework
-    embedder = EmbeddingFramework(framework="transformer", model="Alibaba-NLP/gte-large-en-v1.5")
+    # embedder = EmbeddingFramework(framework="transformer", model="Alibaba-NLP/gte-large-en-v1.5")
+    embedder = EmbeddingFramework(framework="sentence-transformer", model="Alibaba-NLP/gte-large-en-v1.5")
 
     while True:
         query = input("Enter your query (or 'exit' to quit): ")

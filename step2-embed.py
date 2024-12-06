@@ -3,10 +3,11 @@ from utils import concatenate_columns
 
 # Define paths and initialize embedding framework
 input_csv_path = 'emerson_products_97p_nodup.csv'  # Replace with your CSV file path
-output_csv_path = 'emerson_products_97p_ANLP_noquery.csv'  # Replace as needed
-#embedding_framework = EmbeddingFramework(framework="voyageai", model="voyage-3")
-#embedding_framework = EmbeddingFramework(framework="transformer", model="nvidia/NV-Embed-v2")
-embedding_framework = EmbeddingFramework(framework="transformer", model="Alibaba-NLP/gte-large-en-v1.5")
+output_csv_path = 'emerson_products_97p_ANLP_noquery_ST.csv'  # Replace as needed
+# embedding_framework = EmbeddingFramework(framework="voyageai", model="voyage-3")
+# embedding_framework = EmbeddingFramework(framework="transformer", model="nvidia/NV-Embed-v2")
+# embedding_framework = EmbeddingFramework(framework="transformer", model="Alibaba-NLP/gte-large-en-v1.5")
+embedding_framework = EmbeddingFramework(framework="sentence-transformer", model="Alibaba-NLP/gte-large-en-v1.5")
 
 
 # Load data
