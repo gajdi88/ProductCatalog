@@ -10,6 +10,7 @@ import torch.nn.functional as F
 from transformers import AutoTokenizer, AutoModel
 from sentence_transformers import SentenceTransformer
 from sentence_transformers.util import cos_sim
+from sklearn.preprocessing import normalize
 
 import time
 
@@ -83,7 +84,8 @@ class EmbeddingFramework:
                 normalized_embeddings_np = normalized_embeddings.cpu().numpy()
             elif self.framework == "sentence-transformer":
                 embeddings = self.model.encode(inputs)
-                normalized_embeddings_np = embeddings
+                s_em = normalize(embeddings, norm='l2', axis=1, copy=True, return_norm=False)
+                normalized_embeddings_np = s_em
             else:
                 print('Wrong Embedding Framework')
 
