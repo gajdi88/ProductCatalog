@@ -18,3 +18,7 @@ sentence-transformers
 packaging
 datasets
 selenium
+langchain
+langchain-openai
+langchain-core
+langchain-community
