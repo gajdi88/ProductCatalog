@@ -27,25 +27,29 @@ Disadvantage of the simplicity - for example, if searching for a pressure sensor
 ### RAG-fusion
 - You are a helpful assistant that generates multiple search queries based on a single input query. \n Generate multiple search questions related to {question} \n Output (4 queries): “”"
 - Whichever doc gets mentioned multiple times, their scores of having been found get added up
-Reference paper: [RAG-Fusion: a New Take on Retrieval-Augmented Generation](https://arxiv.org/abs/2402.03367)
+- Reference paper: [RAG-Fusion: a New Take on Retrieval-Augmented Generation](https://arxiv.org/abs/2402.03367)
 
 ### Multi-query
 - Re-phrase the question in a few different ways, retrieve multiple times, and then fuse the retrieval in some way
 - You are an AI assistant. Your task is to generate five different versions of the given user question to retrieve relevant documents form a vector database. By generating multiple perspectives of the user question, your goal is to help the user overcome some of the limitations of the distance-based similarity search. Provide alternate questions separated by newlines. Original question: {orig}
 
-### Sub-question
+### Sub-question / Decomposing the question
 - Decompose problem into sub-problems, then solve sequentially. Plus, Interlieve retrieval with Chain of Thought
+- Reference paper: [Least-to-most prompting paper](http://arxiv.org/abs/2205.10625)
 
 ### Step-back question - few shot prompting
 - You are an expert at world knowledge. Your task is to step back and paraphrase a question to a more generic step-back question, which is easier to answer. Here are a few examples:  Original Question: \<Original Question Example1\> Stepback Question: \<Stepback Question Example1\>
+- Reference paper: [Step-Back questioning](http://arxiv.org/abs/2310.06117)
 
 ### HyDE - hypothetical answer
 - write a hypothetical answer to a question and look up the embedding of the hypothetical answer for a match, rather than a question directly
+- Reference paper: [HyDE](https://arxiv.org/abs/2212.10496)
 
 ### Indexing
 - Optimise chunk size for embedding - semantic splitters
 - Rather than just embedding, embed a summary of each product. Use summary embedding for the query matching - but use the raw document for the last generation step
 - Hierarchical indexing (RAPTOR)
   - embed chunks, but then also cluster up chunks, summarise chunks, and embed clusters too
+  - [RAPTOR paper](http://arxiv.org/abs/2401.18059)
 - Colbert - tokenise / chunk up docs as well as the queries. find max per query token.
 - alternatives - retrieve, if not too relevant, try more complex retrieval routes
